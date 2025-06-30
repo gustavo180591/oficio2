@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenido al Sistema de Oficios{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm mb-5">
+                <div class="card-body p-5 text-center">
+                    <h1 class="display-4 mb-4">Bienvenido al Sistema de Gestión de Oficios</h1>
+                    <p class="lead mb-4">Una solución integral para la gestión de oficios y registros institucionales.</p>
+                    
+                    <div class="row mt-5">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0">
+                                <div class="card-body">
+                                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-file-alt fa-2x"></i>
+                                    </div>
+                                    <h3>Gestión de Oficios</h3>
+                                    <p class="text-muted">Administra y realiza un seguimiento de todos los oficios de manera eficiente.</p>
+                                    <a href="{{ path('app_oficio') }}" class="btn btn-outline-primary">Ver Oficios</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0">
+                                <div class="card-body">
+                                    <div class="icon-box bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-tasks fa-2x"></i>
+                                    </div>
+                                    <h3>Registros</h3>
+                                    <p class="text-muted">Mantén un registro detallado de todas las actividades y seguimientos.</p>
+                                    <a href="{{ path('app_registro') }}" class="btn btn-outline-success">Ver Registros</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0">
+                                <div class="card-body">
+                                    <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-chart-line fa-2x"></i>
+                                    </div>
+                                    <h3>Reportes</h3>
+                                    <p class="text-muted">Genera reportes detallados y análisis de la información.</p>
+                                    <a href="#" class="btn btn-outline-info">Ver Reportes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if not app.user %}
+                    <div class="mt-5">
+                        <h2 class="mb-4">¿Listo para comenzar?</h2>
+                        <a href="{{ path('app_login') }}" class="btn btn-primary btn-lg me-3">Iniciar Sesión</a>
+                        <a href="#" class="btn btn-outline-secondary btn-lg">Más Información</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h4 mb-3">Características Principales</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Interfaz intuitiva y fácil de usar</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Acceso seguro con autenticación</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Diseño completamente responsivo</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Notificaciones en tiempo real</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i> Soporte para múltiples usuarios</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h4 mb-3">Soporte Técnico</h3>
+                            <p>¿Necesitas ayuda? Nuestro equipo de soporte está disponible para asistirte.</p>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-envelope me-3 text-primary"></i>
+                                <span>soporte@sistemadeoficios.com</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone me-3 text-primary"></i>
+                                <span>+54 9 11 1234-5678</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-box {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover .icon-box {
+        transform: scale(1.1);
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    @media (max-width: 768px) {
+        .display-4 {
+            font-size: 2rem;
+        }
+        
+        .lead {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}

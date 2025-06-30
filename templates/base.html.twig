@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Sistema de Oficios{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+        <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --light-color: #ecf0f1;
+                --dark-color: #2c3e50;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                background-color: #f8f9fa;
+            }
+            
+            .navbar {
+                background-color: var(--primary-color) !important;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .navbar-brand {
+                font-weight: 700;
+                color: white !important;
+            }
+            
+            .main-content {
+                flex: 1;
+                padding: 2rem 0;
+            }
+            
+            .card {
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                margin-bottom: 1.5rem;
+                transition: transform 0.3s ease;
+            }
+            
+            .card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .btn-primary {
+                background-color: var(--secondary-color);
+                border: none;
+                padding: 0.5rem 1.5rem;
+                border-radius: 50px;
+                font-weight: 500;
+            }
+            
+            .btn-primary:hover {
+                background-color: #2980b9;
+                transform: translateY(-1px);
+            }
+            
+            footer {
+                background-color: var(--dark-color);
+                color: white;
+                padding: 1.5rem 0;
+                margin-top: auto;
+            }
+            
+            /* Estilos responsivos */
+            @media (max-width: 768px) {
+                .main-content {
+                    padding: 1rem 0;
+                }
+                
+                .container {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+            }
+        </style>
+    {% endblock %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('app_home') }}">
+                <i class="fas fa-file-alt me-2"></i>Sistema de Oficios
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_home') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_registro') }}">Registros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_oficio') }}">Oficios</a>
+                    </li>
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Iniciar Sesión</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="text-center mt-4">
+        <div class="container">
+            <p class="mb-0">&copy; {{ "now"|date("Y") }} Sistema de Oficios. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (opcional, necesario para algunos componentes) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    {% block javascripts %}
+    <script>
+        function guardarComentario(registroId) {
+            const comentarioText = document.getElementById(`comentario-text-${registroId}`);
+            const ratingInput = document.querySelector(`input[name="rating-${registroId}"]:checked`);
+            const nameInput = document.getElementById(`name-${registroId}`);
+
+            if (!comentarioText || !ratingInput || !nameInput) {
+                alert('Por favor, agrega un comentario, selecciona una calificación y proporciona tu nombre.');
+                return;
+            }
+
+            const name = nameInput.value;
+            const comentario = comentarioText.value;
+            const rating = ratingInput.value;
+
+            fetch('{{ path('guardar_comentario') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new URLSearchParams({
+                    'registroId': registroId,
+                    'comentario': comentario,
+                    'calification': rating,
+                    'name': name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const comentarioGuardadoDiv = document.getElementById(`comentario-guardado-${registroId}`);
+                    comentarioGuardadoDiv.innerHTML = `
+                        <p><strong>Nombre:</strong> ${name}</p>
+                        <p><strong>Comentario:</strong> ${comentario}</p>
+                        <p><strong>Calificación:</strong> ${'⭐'.repeat(rating)}</p>
+                    `;
+
+                    comentarioText.value = '';
+                    if (ratingInput) ratingInput.checked = false;
+                    if (nameInput) nameInput.value = ''; // Limpiar el campo de nombre
+
+                    // Recargar los comentarios
+                    fetchComentarios(registroId);
+                } else {
+                    alert('Hubo un problema al guardar el comentario.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un problema al guardar el comentario.');
+            });
+        }
+
+        function fetchComentarios(registroId) {
+            fetch('{{ path('comentarios', {'id': 'REPLACE_ID'}) }}'.replace('REPLACE_ID', registroId))
+                .then(response => response.json())
+                .then(data => {
+                    const comentariosDiv = document.getElementById(`comentarios-${registroId}`);
+                    comentariosDiv.innerHTML = '';
+                    data.comments.forEach(comment => {
+                        comentariosDiv.innerHTML += `
+                            <div class="border p-2 mb-2">
+                                <p><strong>Nombre:</strong> ${comment.name}</p>
+                                <p><strong>Calificación:</strong> ${'⭐'.repeat(comment.calification)}</p>
+                                <p><strong>Comentario:</strong> ${comment.comment}</p>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
+<style>
+.custom-file-input ~ .custom-file-label::after {
+    content: "Seleccionar Archivo";
+}
+  </style>
+    {% endblock %}
+    
+</body>
+</html>
