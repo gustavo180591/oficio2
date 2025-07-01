@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reportes - Sistema de Oficios{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Panel de Reportes</h1>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Reporte de Usuarios</h5>
+                                <p class="card-text">Vista general de usuarios registrados y sus actividades.</p>
+                                <a href="#" class="btn btn-primary">Generar Reporte</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Reporte de Oficios</h5>
+                                <p class="card-text">Estadísticas y análisis de oficios registrados.</p>
+                                <a href="#" class="btn btn-primary">Generar Reporte</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Reporte de Actividad</h5>
+                                <p class="card-text">Registro de actividades y acciones en el sistema.</p>
+                                <a href="#" class="btn btn-primary">Generar Reporte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
