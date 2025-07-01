@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Oficio;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class OficioController extends AbstractController
 {
@@ -43,24 +46,88 @@ class OficioController extends AbstractController
         return $this->redirectToRoute('app_full_list');
     }
     #[Route('/oficio/{id}/toggle-status', name: 'oficio_toggle_status', methods: ['POST'])]
-    public function toggleStatus($id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function toggleStatus($id, Request $request, EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
-        $oficio = $em->getRepository(Oficio::class)->find($id);
+        try {
+            // Get the request data
+            $data = json_decode($request->getContent(), true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $data = $request->request->all();
+            }
+            
+            // Verify CSRF token from request data
+            if (!isset($data['_token']) || !$csrfTokenManager->isTokenValid(new CsrfToken('oficio_toggle', $data['_token']))) {
+                return new JsonResponse(['success' => false, 'error' => 'Token CSRF inválido'], 403);
+            }
 
-        if (!$oficio) {
-            return new JsonResponse(['error' => 'Oficio no encontrado'], 404);
+            // Find the oficio
+            $oficio = $em->getRepository(Oficio::class)->find($id);
+            if (!$oficio) {
+                return new JsonResponse(['success' => false, 'error' => 'Oficio no encontrado'], 404);
+            }
+
+            // Validate status
+            if (!isset($data['status'])) {
+                return new JsonResponse(['success' => false, 'error' => 'Estado no proporcionado'], 400);
+            }
+
+            // Update status
+            $newStatus = (bool)$data['status'];
+            $oficio->setStatus($newStatus);
+            $em->persist($oficio);
+            $em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'status' => $oficio->isStatus(),
+                'message' => 'Estado actualizado correctamente',
+                'newStatus' => $oficio->isStatus() ? '1' : '0'
+            ]);
+            
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'Error al actualizar el estado',
+                'message' => $e->getMessage()
+            ], 500);
         }
+    }
 
-        $data = json_decode($request->getContent(), true);
-        if (!isset($data['status'])) {
-            return new JsonResponse(['error' => 'Estado no proporcionado'], 400);
+    #[Route('/oficio/{id}/delete', name: 'oficio_delete', methods: ['DELETE'])]
+    public function delete($id, Request $request, EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    {
+        try {
+            // Get the request data
+            $data = json_decode($request->getContent(), true);
+            
+            // Verify CSRF token from request data
+            if (!isset($data['_token']) || !$csrfTokenManager->isTokenValid(new CsrfToken('oficio_delete', $data['_token']))) {
+                return new JsonResponse(['success' => false, 'error' => 'Token CSRF inválido'], 403);
+            }
+
+            // Find the oficio
+            $oficio = $em->getRepository(Oficio::class)->find($id);
+            if (!$oficio) {
+                return new JsonResponse(['success' => false, 'error' => 'Oficio no encontrado'], 404);
+            }
+
+            // Remove the oficio
+            $em->remove($oficio);
+            $em->flush();
+            
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Oficio eliminado correctamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'No se pudo eliminar el oficio',
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        $oficio->setStatus($data['status']);
-        $em->persist($oficio);
-        $em->flush();
-
-        return new JsonResponse(['success' => true]);
     }
 }
 
