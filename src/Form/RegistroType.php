@@ -71,9 +71,23 @@ class RegistroType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Ingrese la dirección de trabajo'],
             ])
             // Pago
-            ->add('payment', null, [
-                'label' => 'Método de Pago',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Ingrese el método de pago'],
+            ->add('payment', ChoiceType::class, [
+                'label' => 'MÉTODO DE PAGO',
+                'choices' => [
+                    'EFECTIVO' => 'EFECTIVO',
+                    'TRANSFERENCIA BANCARIA' => 'TRANSFERENCIA BANCARIA',
+                    'MERCADO PAGO' => 'MERCADO PAGO',
+                    'OTRO' => 'OTRO',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'form-check-input me-3'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label d-block mb-2'
+                ],
+                'required' => true,
             ])
             // Tiempo
             ->add('time', null, [

@@ -3,60 +3,50 @@
 {% block title %}REGISTRO DE OFICIOS{% endblock %}
 
 {% block body %}
+<style>
+    .btn-register {
+        background-color: #f97316;
+        color: white;
+        border-color: #ea580c;
+        transition: background-color 0.2s;
+    }
+    .btn-register:hover {
+        background-color: #fb923c;
+        color: white;
+    }
+    .btn-search {
+        background-color: #3b82f6;
+        color: white;
+        border-color: #2563eb;
+        transition: background-color 0.2s;
+    }
+    .btn-search:hover {
+        background-color: #60a5fa;
+        color: white;
+    }
+</style>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
+        <div class="col-12 col-lg-10">
             <div class="card shadow-sm mb-5">
-                <div class="card-body p-5 text-center">
-                    <div class="text-center mb-4">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
+                <div class="card-body p-3 p-md-5">
+                    <div class="text-center mb-5">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 85%; max-height: 150px; width: auto;">
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-orange-500 mb-4">BIENVENIDO AL REGISTRO DE OFICIOS DE LA CIUDAD DE POSADAS</h1>
-                    <p class="text-lg text-gray-700 mb-6"">ENCUENTRA Y CONECTA DE MANERA FÁCIL Y RÁPIDA CON TRABAJADORES DE DIFERENTES OFICIOS</p>
+                    <h1 class="h2 mb-4 fw-bold" style="color: #f97316;">BIENVENIDO AL REGISTRO DE OFICIOS DE LA CIUDAD DE POSADAS</h1>
+                    <p class="lead text-muted mb-5">ENCUENTRA Y CONECTA DE MANERA FÁCIL Y RÁPIDA CON TRABAJADORES DE DIFERENTES OFICIOS</p>
                     
-                    <div class="row mt-5 justify-content-center">
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 border-0">
-                                <div class="card-body">
-                                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-file-alt fa-2x"></i>
-                                    </div>
-                                    <h3>Buscador de Oficios</h3>
-                                    <p class="text-muted">Los trabajadores de tu barrio, listos para hacer el trabajo que vos necesitás.</p>
-                                    <a href="{{ path('app_oficio') }}" class="btn btn-outline-primary">Buscador</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 border-0">
-                                <div class="card-body">
-                                    <div class="icon-box bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-tasks fa-2x"></i>
-                                    </div>
-                                    <h3>Registros</h3>
-                                    <p class="text-muted">Mantén un registro detallado de todas las actividades y seguimientos.</p>
-                                    <a href="{{ path('app_registro') }}" class="btn btn-outline-success">Ver Registros</a>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <div class="d-flex flex-wrap justify-content-center gap-4 mt-5">
+                        <a href="{{ path('app_lista') }}" class="btn btn-search btn-lg px-5 py-3">
+                            <i class="fas fa-search me-2"></i> Buscar Oficio
+                        </a>
+                        <a href="{{ path('app_registro') }}" class="btn btn-register btn-lg px-5 py-3">
+                            <i class="fas fa-user-plus me-2"></i> Registrarme
+                        </a>
                         {% if is_granted('ROLE_ADMIN') %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 border-0">
-                                <div class="card-body">
-                                    <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-4" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-chart-line fa-2x"></i>
-                                    </div>
-                                    <h3>Reportes</h3>
-                                    <p class="text-muted">Genera reportes detallados y análisis de la información.</p>
-                                    <a href="{{ path('app_reportes') }}" class="btn btn-outline-info">Ver Reportes</a>
-                                </div>
-                            </div>
-                        </div>
-                        {% else %}
-                        <!-- Empty column to maintain centering when there are only 2 columns -->
-                        <div class="col-md-4"></div>
+                        <a href="{{ path('app_reportes') }}" class="btn btn-outline-info btn-lg px-5 py-3">
+                            <i class="fas fa-chart-line me-2"></i> Reportes
+                        </a>
                         {% endif %}
                     </div>
                 </div>
