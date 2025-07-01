@@ -85,10 +85,14 @@ class Registro
     #[ORM\Column(type: 'boolean')]
     private ?bool $status = true; // Por defecto habilitado
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
     public function __construct()
     {
         $this->delegacion = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function setImageFile(?File $imageFile = null): void
@@ -103,6 +107,18 @@ class Registro
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getId(): ?int
