@@ -184,7 +184,13 @@
                     {{ form_errors(form.phone) }}
                 </div>
             </div>
-           
+           <div class="mb-3">
+                {{ form_label(form.dni, 'DNI', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dni, {'attr': {'class': 'form-control', 'placeholder': 'DNI'}}) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.dni) }}
+                </div>
+            </div>
             <div class="mb-3">
                 {{ form_label(form.address, 'DIRECCIÓN', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'DIRECCIÓN'}}) }}
